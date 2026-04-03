@@ -5,7 +5,7 @@ st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕",
 
 # 基本設定
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
-# 【關鍵更新】改用新生成的日出賽車背景
+# 確保背景圖片檔名正確
 wallpaper_url = base_url + "apex-endurance-32.png"
 whatsapp_number = "85263168336"
 
@@ -63,13 +63,12 @@ beans = [
     }
 ]
 
-# CSS 樣式
+# CSS 樣式 (修正了 f-string 導致的雙括號問題)
 st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;700&display=swap');
 
     .stApp {{
-        /* 修正背景圖片顯示：使用 contain 確保不被裁切，並靠右對齊顯示咖啡豆包裝 */
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url("{wallpaper_url}");
         background-size: contain;
         background-repeat: no-repeat;
@@ -77,10 +76,10 @@ st.markdown(f"""
         background-attachment: fixed;
         background-color: #000000;
         font-family: 'Inter', sans-serif;
-    }
+    }}
     
     .detail-section {{
-        background: rgba(0, 0, 0, 0.4); /* 加深玻璃擬態背景，確保文字清晰 */
+        background: rgba(0, 0, 0, 0.4);
         border-radius: 40px;
         padding: 50px 40px;
         margin-bottom: 30px;
