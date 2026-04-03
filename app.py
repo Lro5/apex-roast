@@ -69,13 +69,15 @@ st.markdown(f"""
     @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;700&display=swap');
 
     .stApp {{
-        /* 稍微降低遮罩濃度 (從 0.8 改為 0.6)，讓日出賽車背景更顯眼 */
+        /* 修正背景圖片顯示：使用 contain 確保不被裁切，並靠右對齊顯示咖啡豆包裝 */
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url("{wallpaper_url}");
-        background-size: cover;
-        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center right;
         background-attachment: fixed;
+        background-color: #000000;
         font-family: 'Inter', sans-serif;
-    }}
+    }
     
     .detail-section {{
         background: rgba(0, 0, 0, 0.4); /* 加深玻璃擬態背景，確保文字清晰 */
