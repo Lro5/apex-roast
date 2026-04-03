@@ -1,6 +1,6 @@
 import streamlit as st
 
-# 【更新 1】將 layout 改為 wide，讓我們有空間將內容靠左
+# 設定網頁標題
 st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕", layout="wide")
 
 # 基本設定
@@ -69,27 +69,29 @@ st.markdown(f"""
 
     /* 頂層背景設定 */
     .stApp {{
-        background: linear-gradient(90deg, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.2) 100%), url("{wallpaper_url}");
-        background-size: cover;
-        background-position: center right;
+        /* 【關鍵修正】使用 70% contain 讓圖片縮小，不鋪滿全屏 */
+        background: linear-gradient(90deg, rgba(0,0,0,1) 40%, rgba(0,0,0,0.2) 100%), url("{wallpaper_url}");
+        background-size: contain; 
+        background-repeat: no-repeat;
+        background-position: right center; /* 圖片縮小並靠右 */
         background-attachment: fixed;
+        background-color: #000000; /* 底色設為純黑 */
         font-family: 'Inter', sans-serif;
     }}
 
-    /* 【更新 2】核心排版：將 Streamlit 預設容器靠左，並限制寬度 */
+    /* 核心排版：內容靠左並限制寬度 */
     [data-testid="stMainViewContainer"] > section {{
         padding-left: 5% !important;
-        padding-right: 45% !important; /* 右邊留空，避開背景圖的賽車 */
+        padding-right: 50% !important; 
     }}
     
-    /* 調整區塊內部文字對齊為靠左 */
     .detail-section {{
         background: rgba(255, 255, 255, 0.03);
         border-radius: 40px;
         padding: 50px 40px;
         margin-bottom: 30px;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        text-align: left; /* 改為靠左對齊 */
+        text-align: left;
         backdrop-filter: blur(10px);
     }}
 
@@ -147,7 +149,6 @@ st.markdown(f"""
         text-transform: uppercase;
     }}
 
-    /* 清理圖片背景 */
     [data-testid="stImage"] {{
         background-color: transparent !important;
     }}
@@ -159,7 +160,6 @@ st.markdown(f"""
         width: 100%;
     }}
 
-    /* 按鈕靠左 */
     .stButton {{
         display: flex;
         justify-content: flex-start !important;
@@ -177,7 +177,7 @@ st.markdown(f"""
     </style>
     """, unsafe_allow_html=True)
 
-# 頂部 Logo (改為靠左對齊)
+# 頂部 Logo
 st.markdown('<div style="text-align: left; padding: 80px 0;">', unsafe_allow_html=True)
 st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: clamp(30px, 5vw, 60px); letter-spacing: 10px; margin: 0; line-height: 1.2;">APEX<br>ROAST</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; font-weight: 300; font-size: 11px; margin-top: 15px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
@@ -186,13 +186,11 @@ st.markdown('</div>', unsafe_allow_html=True)
 # 逐款解說
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
-    
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     st.markdown(f'<p style="color: rgba(255,255,255,0.3); font-size: 13px; margin-bottom: 30px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
-    # 圖片大小稍微調小，適合靠左排版
-    st.image(base_url + bean["img"], width=380)
+    st.image(base_url + bean["img"], width=350)
     
     st.markdown(f'<p class="story-text">{bean["story_zh"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<p class="story-en">{bean["story_en"]}</p>', unsafe_allow_html=True)
@@ -204,7 +202,15 @@ for i, bean in enumerate(beans):
         </div>
     ''', unsafe_allow_html=True)
     
-    st.button(f"ORDER NOW", key=f"btn_{i}", on_click=lambda b=bean: st.write(f"Redirecting to WhatsApp for {b['name']}..."))
+    # 修改 WhatsApp 連結按鈕
+    whatsapp_url_link = f"https://wa.me/{whatsapp_number}?text=Hello, I would like to order: {bean['name']}"
+    st.markdown(f'''
+        <div class="stButton">
+            <a href="{whatsapp_url_link}" target="_blank" style="text-decoration: none;">
+                <button>ORDER NOW</button>
+            </a>
+        </div>
+    ''', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
