@@ -69,13 +69,12 @@ st.markdown(f"""
 
     /* 頂層背景設定 */
     .stApp {{
-        /* 【關鍵修正】使用 70% contain 讓圖片縮小，不鋪滿全屏 */
         background: linear-gradient(90deg, rgba(0,0,0,1) 40%, rgba(0,0,0,0.2) 100%), url("{wallpaper_url}");
         background-size: contain; 
         background-repeat: no-repeat;
-        background-position: right center; /* 圖片縮小並靠右 */
+        background-position: right center; 
         background-attachment: fixed;
-        background-color: #000000; /* 底色設為純黑 */
+        background-color: #000000; 
         font-family: 'Inter', sans-serif;
     }}
 
@@ -132,7 +131,7 @@ st.markdown(f"""
         border: 1px solid rgba(255, 215, 0, 0.2);
         padding: 20px;
         border-radius: 20px;
-        margin: 20px 0 40px 0;
+        margin: 20px 0 20px 0;
         max-width: 500px;
     }}
 
@@ -160,6 +159,13 @@ st.markdown(f"""
         width: 100%;
     }}
 
+    .order-guide {{
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 12px;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }}
+
     .stButton {{
         display: flex;
         justify-content: flex-start !important;
@@ -177,10 +183,11 @@ st.markdown(f"""
     </style>
     """, unsafe_allow_html=True)
 
-# 頂部 Logo
+# 頂部 Logo 區域 (加入咖啡豆販售字眼)
 st.markdown('<div style="text-align: left; padding: 80px 0;">', unsafe_allow_html=True)
 st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: clamp(30px, 5vw, 60px); letter-spacing: 10px; margin: 0; line-height: 1.2;">APEX<br>ROAST</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; font-weight: 300; font-size: 11px; margin-top: 15px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
+st.markdown('<p style="color: rgba(255,255,255,0.6); font-size: 14px; letter-spacing: 2px; margin-top: 10px; border-left: 2px solid #FF4B4B; padding-left: 15px;">PRIVATE COFFEE ROASTERY | 精品咖啡豆專供</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 # 逐款解說
@@ -201,6 +208,9 @@ for i, bean in enumerate(beans):
             <span class="flavor-tag-en">Flavor Profile: {bean["flavor_en"]}</span>
         </div>
     ''', unsafe_allow_html=True)
+    
+    # 加上購買引導字眼
+    st.markdown('<p class="order-guide">點擊下方按鈕通過 WhatsApp 訂購咖啡豆：</p>', unsafe_allow_html=True)
     
     # 修改 WhatsApp 連結按鈕
     whatsapp_url_link = f"https://wa.me/{whatsapp_number}?text=Hello, I would like to order: {bean['name']}"
