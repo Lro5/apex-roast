@@ -8,7 +8,7 @@ base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-32.png"
 whatsapp_number = "85263168336"
 
-# 深度資料庫
+# 深度資料庫 (保持不變)
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
@@ -67,9 +67,19 @@ st.markdown(f"""
         background: rgba(255, 255, 255, 0.05);
         border-radius: 30px;
         padding: 40px;
-        margin-bottom: 60px;
+        margin-bottom: 20px; /* 縮減底部間距，讓分界線更貼合 */
         border: 1px solid rgba(255, 255, 255, 0.1);
         text-align: center;
+    }}
+    
+    /* === 新增：賽車發光分界線 === */
+    .section-divider {{
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 30, 30, 0.8), transparent);
+        margin: 60px auto;
+        width: 80%;
+        box-shadow: 0 0 15px rgba(255, 30, 30, 0.5);
+        border: none;
     }}
     
     .bean-title {{
@@ -104,7 +114,7 @@ st.markdown(f"""
         margin-bottom: 30px;
     }}
 
-    /* === 按鈕風格深度美化 === */
+    /* 按鈕風格美化 (保留賽車紅漸變) */
     .stButton {{
         display: flex;
         justify-content: center;
@@ -112,7 +122,6 @@ st.markdown(f"""
     }}
 
     .stButton>button {{
-        /* 賽車紅高級漸變配色 */
         background: linear-gradient(135deg, #FF1E1E 0%, #8B0000 100%) !important;
         color: white !important;
         border-radius: 50px !important;
@@ -126,17 +135,11 @@ st.markdown(f"""
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }}
 
-    /* 懸停動效：發光並輕微放大 */
     .stButton>button:hover {{
         transform: scale(1.08) !important;
         background: linear-gradient(135deg, #FF4B4B 0%, #FF1E1E 100%) !important;
         box-shadow: 0 0 30px rgba(255, 30, 30, 0.6) !important;
         border: 2px solid rgba(255, 255, 255, 0.6) !important;
-    }}
-
-    /* 點擊時的縮回感 */
-    .stButton>button:active {{
-        transform: scale(0.95) !important;
     }}
     </style>
     """, unsafe_allow_html=True)
@@ -147,25 +150,25 @@ st.markdown('<h1 style="color: white; font-size: 80px; font-weight: 900; letter-
 st.markdown('<p style="color: #FF4B4B; letter-spacing: 10px; font-weight: 300;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 逐款仔細解說 (完全保留原始邏輯)
-for bean in beans:
+# 逐款仔細解說
+for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
     
-    # 產地標籤與標題
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     st.markdown(f'<p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
-    # 圖片居中 (寬度適中)
     st.image(base_url + bean["img"], width=400)
     
-    # 故事與口味
     st.markdown(f'<p class="story-text">{bean["story"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<span class="flavor-tag">風味：{bean["flavor"]}</span>', unsafe_allow_html=True)
     
-    # 購買按鈕 (套用新樣式)
     st.link_button(f"Order Now", f"https://wa.me/{whatsapp_number}?text=你好，我想購買：{bean['name']}")
     
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # 喺兩款豆之間加入分界線，但最後一款豆下面唔加
+    if i < len(beans) - 1:
+        st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
 st.markdown('<p style="text-align: center; color: white; opacity: 0.3; padding: 50px;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
