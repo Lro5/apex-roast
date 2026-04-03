@@ -5,10 +5,12 @@ st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕",
 
 # 基本設定
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
-wallpaper_url = base_url + "apex-32.png"
 whatsapp_number = "85263168336"
 
-# 深度資料庫
+# 【關鍵修正】更新為新生成的 32號日出背景圖
+wallpaper_url = base_url + "apex-endurance-32.png"
+
+# 深度資料庫 (含中英文內容)
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
@@ -62,31 +64,29 @@ beans = [
     }
 ]
 
-# CSS 樣式：導入 Michroma (還原包裝袋 icon 字體)
+# CSS 樣式
 st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;700&display=swap');
 
     .stApp {{
-        background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url("{wallpaper_url}");
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url("{wallpaper_url}");
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
         font-family: 'Inter', sans-serif;
     }}
     
-    /* 產品區塊 */
     .detail-section {{
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(0, 0, 0, 0.4);
         border-radius: 40px;
         padding: 50px 40px;
         margin-bottom: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         text-align: center;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(15px);
     }}
 
-    /* 標題字體：Michroma (還原包裝袋 icon 粗獷方正感) */
     .bean-title {{
         color: #FFFFFF !important;
         font-family: 'Michroma', sans-serif;
@@ -122,8 +122,8 @@ st.markdown(f"""
     }}
     
     .flavor-box {{
-        background: rgba(255, 215, 0, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.2);
+        background: rgba(255, 215, 0, 0.1);
+        border: 1px solid rgba(255, 215, 0, 0.3);
         padding: 20px;
         border-radius: 20px;
         margin: 20px auto 40px auto;
@@ -139,32 +139,23 @@ st.markdown(f"""
     }}
 
     .flavor-tag-en {{
-        color: rgba(255, 215, 0, 0.6);
+        color: rgba(255, 215, 0, 0.7);
         font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 1px;
         display: block;
     }}
 
-    /* 強力清理格仔 */
     [data-testid="stImage"], [data-testid="stImage"] > div, .stImage, .stButton {{
         background-color: transparent !important;
         border: none !important;
         box-shadow: none !important;
     }}
 
-    /* 賽車發光分界線 */
     .section-divider {{
         height: 1px;
         background: linear-gradient(90deg, transparent, rgba(255, 75, 75, 0.4), transparent);
         margin: 80px auto;
         width: 70%;
-    }}
-
-    /* 按鈕樣式 */
-    .stButton {{
-        display: flex;
-        justify-content: center;
     }}
 
     .stButton>button {{
@@ -181,24 +172,23 @@ st.markdown(f"""
 
     .stButton>button:hover {{
         transform: scale(1.05);
-        box-shadow: 0 0 30px rgba(255, 30, 30, 0.4) !important;
+        box-shadow: 0 0 30px rgba(255, 30, 30, 0.6) !important;
     }}
     </style>
     """, unsafe_allow_html=True)
 
-# 頂部 Logo (使用 Michroma 模擬包裝 icon)
+# 頂部 Logo
 st.markdown('<div style="text-align: center; padding: 120px 0;">', unsafe_allow_html=True)
 st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: clamp(35px, 7vw, 85px); letter-spacing: 15px; margin: 0; line-height: 1.2;">APEX<br>ROAST</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 8px; font-weight: 300; font-size: 13px; margin-top: 20px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 逐款解說
+# 產品解說循環
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
-    
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
-    st.markdown(f'<p style="color: rgba(255,255,255,0.3); font-size: 13px; margin-bottom: 40px;">{bean["award"]}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 40px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
     st.image(base_url + bean["img"], width=450)
     
@@ -213,7 +203,6 @@ for i, bean in enumerate(beans):
     ''', unsafe_allow_html=True)
     
     st.link_button(f"ORDER NOW", f"https://wa.me/{whatsapp_number}?text=Hello, I would like to order: {bean['name']}")
-    
     st.markdown('</div>', unsafe_allow_html=True)
 
     if i < len(beans) - 1:
