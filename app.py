@@ -5,12 +5,11 @@ st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕",
 
 # 基本設定
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
+# 【關鍵更新】改用新生成的日出賽車背景
+wallpaper_url = base_url + "apex-endurance-32.png"
 whatsapp_number = "85263168336"
 
-# 【關鍵修正】更新為新生成的 32號日出背景圖
-wallpaper_url = base_url + "apex-endurance-32.png"
-
-# 深度資料庫 (含中英文內容)
+# 深度資料庫
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
@@ -70,6 +69,7 @@ st.markdown(f"""
     @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;700&display=swap');
 
     .stApp {{
+        /* 稍微降低遮罩濃度 (從 0.8 改為 0.6)，讓日出賽車背景更顯眼 */
         background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url("{wallpaper_url}");
         background-size: cover;
         background-position: center;
@@ -78,13 +78,13 @@ st.markdown(f"""
     }}
     
     .detail-section {{
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.4); /* 加深玻璃擬態背景，確保文字清晰 */
         border-radius: 40px;
         padding: 50px 40px;
         margin-bottom: 30px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         text-align: center;
-        backdrop-filter: blur(15px);
+        backdrop-filter: blur(12px);
     }}
 
     .bean-title {{
@@ -142,6 +142,7 @@ st.markdown(f"""
         color: rgba(255, 215, 0, 0.7);
         font-size: 12px;
         text-transform: uppercase;
+        letter-spacing: 1px;
         display: block;
     }}
 
@@ -183,9 +184,10 @@ st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; fon
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 8px; font-weight: 300; font-size: 13px; margin-top: 20px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 產品解說循環
+# 逐款解說
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
+    
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     st.markdown(f'<p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 40px;">{bean["award"]}</p>', unsafe_allow_html=True)
@@ -203,6 +205,7 @@ for i, bean in enumerate(beans):
     ''', unsafe_allow_html=True)
     
     st.link_button(f"ORDER NOW", f"https://wa.me/{whatsapp_number}?text=Hello, I would like to order: {bean['name']}")
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
     if i < len(beans) - 1:
