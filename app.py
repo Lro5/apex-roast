@@ -67,12 +67,12 @@ st.markdown(f"""
         background: rgba(255, 255, 255, 0.05);
         border-radius: 30px;
         padding: 40px;
-        margin-bottom: 20px; /* 縮減底部間距，讓分界線更貼合 */
+        margin-bottom: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         text-align: center;
     }}
     
-    /* === 新增：賽車發光分界線 === */
+    /* 賽車發光分界線 */
     .section-divider {{
         height: 2px;
         background: linear-gradient(90deg, transparent, rgba(255, 30, 30, 0.8), transparent);
@@ -114,11 +114,13 @@ st.markdown(f"""
         margin-bottom: 30px;
     }}
 
-    /* 按鈕風格美化 (保留賽車紅漸變) */
+    /* 清理那個討厭的透明長方形格仔 */
     .stButton {{
         display: flex;
         justify-content: center;
         margin-top: 15px;
+        background: transparent !important; /* 強制移除背景 */
+        border: none !important;
     }}
 
     .stButton>button {{
@@ -167,7 +169,6 @@ for i, bean in enumerate(beans):
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 喺兩款豆之間加入分界線，但最後一款豆下面唔加
     if i < len(beans) - 1:
         st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
