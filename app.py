@@ -8,7 +8,7 @@ base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-endurance-32.png"
 whatsapp_number = "85263168336"
 
-# 深度資料庫 (加入了價格 price 與重量 weight)
+# 深度資料庫
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
@@ -117,6 +117,21 @@ st.markdown(f"""
         text-transform: uppercase;
     }}
 
+    .story-zh {{
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 15px;
+        line-height: 1.7;
+        margin: 20px 0 10px 0;
+    }}
+
+    .story-en {{
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 13px;
+        font-style: italic;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }}
+
     .price-text {{
         color: #FFFFFF;
         font-family: 'Michroma', sans-serif;
@@ -132,13 +147,11 @@ st.markdown(f"""
     
     .flavor-box {{
         background: rgba(255, 215, 0, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-left: 3px solid #FFD700;
         padding: 15px 20px;
-        border-radius: 15px;
         margin: 20px 0;
     }}
 
-    /* 按鈕美化：長橢圓形 + 漸變 + 陰影動畫 */
     .order-btn {{
         display: inline-block;
         background: linear-gradient(135deg, #FF1E1E 0%, #8B0000 100%);
@@ -162,7 +175,6 @@ st.markdown(f"""
         filter: brightness(1.1);
     }}
 
-    /* 修改 Streamlit 預設輸入框顏色 */
     .stNumberInput label {{ color: rgba(255,255,255,0.6) !important; font-size: 12px !important; }}
     </style>
     """, unsafe_allow_html=True)
@@ -178,24 +190,31 @@ st.markdown('</div>', unsafe_allow_html=True)
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
     
+    # 產地標籤與標題
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     st.markdown(f'<p style="color: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 25px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
+    # 圖片
     st.image(base_url + bean["img"], width=320)
     
-    # 價格與重量顯示
-    st.markdown(f'<div class="price-text">HKD ${bean["price"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="weight-text">包裝規格：{bean["weight"]} / 袋</div>', unsafe_allow_html=True)
+    # 【修正點】重新加入產地描述細節 (Story)
+    st.markdown(f'<p class="story-zh">{bean["story_zh"]}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p class="story-en">{bean["story_en"]}</p>', unsafe_allow_html=True)
     
+    # 風味盒
     st.markdown(f'''
         <div class="flavor-box">
             <span style="color: #FFD700; font-weight: 700; font-size: 15px;">風味：{bean["flavor_zh"]}</span><br>
             <span style="color: rgba(255, 215, 0, 0.5); font-size: 11px; text-transform: uppercase;">{bean["flavor_en"]}</span>
         </div>
     ''', unsafe_allow_html=True)
+    
+    # 價格與重量
+    st.markdown(f'<div class="price-text">HKD ${bean["price"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="weight-text">包裝規格：{bean["weight"]} / 袋</div>', unsafe_allow_html=True)
 
-    # 數量選擇器 (Streamlit 原生組件)
+    # 數量選擇器
     col1, col2 = st.columns([1, 2])
     with col1:
         count = st.number_input("數量 / Qty", min_value=1, max_value=20, value=1, key=f"num_{i}")
@@ -203,7 +222,7 @@ for i, bean in enumerate(beans):
     total = bean["price"] * count
     st.markdown(f'<p style="color: rgba(255,255,255,0.7); font-size: 14px;">小計：HKD ${total}</p>', unsafe_allow_html=True)
     
-    # 動態 WhatsApp 訂購連結
+    # WhatsApp 連結
     msg = f"你好，我想訂購：\n- {bean['name']}\n- 數量：{count} 袋\n- 總價：HKD ${total}"
     wa_url = f"https://wa.me/{whatsapp_number}?text={msg.replace(' ', '%20').replace('\\n', '%0A')}"
     
