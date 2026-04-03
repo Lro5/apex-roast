@@ -8,7 +8,7 @@ base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-32.png"
 whatsapp_number = "85263168336"
 
-# 深度資料庫 (已加入英文補充)
+# 深度資料庫
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
@@ -62,10 +62,10 @@ beans = [
     }
 ]
 
-# CSS 樣式：導入 Google Fonts 並優化字體
+# CSS 樣式：導入 Michroma (還原包裝袋 icon 字體)
 st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Inter:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;700&display=swap');
 
     .stApp {{
         background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url("{wallpaper_url}");
@@ -86,22 +86,20 @@ st.markdown(f"""
         backdrop-filter: blur(10px);
     }}
 
-    /* 標題字體：Orbitron (賽車風) */
+    /* 標題字體：Michroma (還原包裝袋 icon 粗獷方正感) */
     .bean-title {{
         color: #FFFFFF !important;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 32px;
-        font-weight: 900;
-        letter-spacing: 2px;
+        font-family: 'Michroma', sans-serif;
+        font-size: 28px;
+        letter-spacing: 1px;
         margin-bottom: 10px;
     }}
     
     .origin-label {{
         color: #FF4B4B;
-        font-family: 'Orbitron', sans-serif;
-        letter-spacing: 5px;
-        font-size: 16px;
-        font-weight: 700;
+        font-family: 'Michroma', sans-serif;
+        letter-spacing: 3px;
+        font-size: 15px;
         margin-bottom: 30px;
         text-transform: uppercase;
     }}
@@ -111,7 +109,7 @@ st.markdown(f"""
         font-size: 16px;
         line-height: 1.8;
         max-width: 650px;
-        margin: 0 auto 10px auto;
+        margin: 0 auto 15px auto;
     }}
 
     .story-en {{
@@ -125,7 +123,7 @@ st.markdown(f"""
     
     .flavor-box {{
         background: rgba(255, 215, 0, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.3);
+        border: 1px solid rgba(255, 215, 0, 0.2);
         padding: 20px;
         border-radius: 20px;
         margin: 20px auto 40px auto;
@@ -142,7 +140,7 @@ st.markdown(f"""
 
     .flavor-tag-en {{
         color: rgba(255, 215, 0, 0.6);
-        font-size: 13px;
+        font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 1px;
         display: block;
@@ -158,7 +156,7 @@ st.markdown(f"""
     /* 賽車發光分界線 */
     .section-divider {{
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255, 75, 75, 0.5), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 75, 75, 0.4), transparent);
         margin: 80px auto;
         width: 70%;
     }}
@@ -172,48 +170,45 @@ st.markdown(f"""
     .stButton>button {{
         background: linear-gradient(135deg, #FF1E1E 0%, #8B0000 100%) !important;
         color: white !important;
-        font-family: 'Orbitron', sans-serif !important;
+        font-family: 'Michroma', sans-serif !important;
         border-radius: 50px !important;
-        padding: 18px 80px !important;
-        font-size: 18px !important;
-        font-weight: 900 !important;
-        letter-spacing: 3px !important;
-        border: 1px solid rgba(255,255,255,0.3) !important;
+        padding: 15px 70px !important;
+        font-size: 16px !important;
+        letter-spacing: 2px !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
         transition: 0.4s;
     }}
 
     .stButton>button:hover {{
         transform: scale(1.05);
-        box-shadow: 0 0 40px rgba(255, 30, 30, 0.5) !important;
+        box-shadow: 0 0 30px rgba(255, 30, 30, 0.4) !important;
     }}
     </style>
     """, unsafe_allow_html=True)
 
-# 頂部 Logo
+# 頂部 Logo (使用 Michroma 模擬包裝 icon)
 st.markdown('<div style="text-align: center; padding: 120px 0;">', unsafe_allow_html=True)
-st.markdown('<h1 style="color: white; font-family: \'Orbitron\', sans-serif; font-size: clamp(40px, 8vw, 90px); font-weight: 900; letter-spacing: 20px; margin: 0;">APEX ROAST</h1>', unsafe_allow_html=True)
-st.markdown('<p style="color: #FF4B4B; font-family: \'Orbitron\', sans-serif; letter-spacing: 12px; font-weight: 300; font-size: 14px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
+st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: clamp(35px, 7vw, 85px); letter-spacing: 15px; margin: 0; line-height: 1.2;">APEX<br>ROAST</h1>', unsafe_allow_html=True)
+st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 8px; font-weight: 300; font-size: 13px; margin-top: 20px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 逐款仔細解說
+# 逐款解說
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
     
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
-    st.markdown(f'<p style="color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 40px;">{bean["award"]}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color: rgba(255,255,255,0.3); font-size: 13px; margin-bottom: 40px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
     st.image(base_url + bean["img"], width=450)
     
-    # 故事內容 (中+英)
     st.markdown(f'<p class="story-text">{bean["story_zh"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<p class="story-en">{bean["story_en"]}</p>', unsafe_allow_html=True)
     
-    # 風味方塊 (中+英)
     st.markdown(f'''
         <div class="flavor-box">
             <span class="flavor-tag-zh">風味：{bean["flavor_zh"]}</span>
-            <span class="flavor-tag-en">Flavor: {bean["flavor_en"]}</span>
+            <span class="flavor-tag-en">Flavor Profile: {bean["flavor_en"]}</span>
         </div>
     ''', unsafe_allow_html=True)
     
@@ -224,4 +219,4 @@ for i, bean in enumerate(beans):
     if i < len(beans) - 1:
         st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-st.markdown('<p style="text-align: center; color: white; opacity: 0.2; font-family: \'Orbitron\', sans-serif; letter-spacing: 5px; padding: 100px;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; color: white; opacity: 0.2; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; padding: 100px;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
