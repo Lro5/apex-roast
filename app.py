@@ -3,8 +3,8 @@ import streamlit as st
 # 設定網頁標題
 st.set_page_config(page_title="Apex Roast | Premium Coffee", page_icon="☕")
 
-# ⚠️ 請將下面改做你嘅 WhatsApp 電話 (例如 85263168336)
-whatsapp_number = "852XXXXXXXX" 
+# 已更新為你的 WhatsApp 電話
+whatsapp_number = "85263168336" 
 
 st.markdown("""
     <style>
