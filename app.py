@@ -183,8 +183,11 @@ st.markdown(f"""
 st.markdown('<div style="text-align: left; padding: 60px 0;">', unsafe_allow_html=True)
 st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: 45px; letter-spacing: 8px; margin: 0;">APEX ROAST</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; font-size: 10px; margin-top: 10px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
-st.markdown('<p style="color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 5px; border-left: 2px solid #FF4B4B; padding-left: 15px;">PRIVATE COFFEE ROASTERY | 精品咖啡豆專供</p>', unsafe_allow_html=True)
+
+# 這裡調整了字體大小 (18px) 和字距 (2px)
+st.markdown('<p style="color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 500; letter-spacing: 2px; margin-top: 15px; border-left: 3px solid #FF4B4B; padding-left: 15px;">PRIVATE COFFEE ROASTERY | 精品咖啡豆專供</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
+
 
 # 逐款解說
 for i, bean in enumerate(beans):
