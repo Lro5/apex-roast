@@ -8,7 +8,7 @@ base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-32.png"
 whatsapp_number = "85263168336"
 
-# 深度資料庫 (保持不變)
+# 深度資料庫
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
@@ -55,6 +55,7 @@ beans = [
 # CSS 樣式
 st.markdown(f"""
     <style>
+    /* 全局背景 */
     .stApp {{
         background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url("{wallpaper_url}");
         background-size: cover;
@@ -62,7 +63,7 @@ st.markdown(f"""
         background-attachment: fixed;
     }}
     
-    /* 產品獨立區塊 */
+    /* 1. 產品獨立區塊 */
     .detail-section {{
         background: rgba(255, 255, 255, 0.05);
         border-radius: 30px;
@@ -72,7 +73,14 @@ st.markdown(f"""
         text-align: center;
     }}
     
-    /* 賽車發光分界線 */
+    /* 2. 【關鍵】徹底清除圖片與按鈕的透明長方形格仔 */
+    [data-testid="stImage"], [data-testid="stImage"] > div, .stImage, .stButton {{
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }}
+    
+    /* 3. 賽車發光分界線 */
     .section-divider {{
         height: 2px;
         background: linear-gradient(90deg, transparent, rgba(255, 30, 30, 0.8), transparent);
@@ -114,13 +122,11 @@ st.markdown(f"""
         margin-bottom: 30px;
     }}
 
-    /* 清理那個討厭的透明長方形格仔 */
+    /* 4. 高級賽車紅按鈕風格 */
     .stButton {{
         display: flex;
         justify-content: center;
         margin-top: 15px;
-        background: transparent !important; /* 強制移除背景 */
-        border: none !important;
     }}
 
     .stButton>button {{
@@ -160,15 +166,18 @@ for i, bean in enumerate(beans):
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     st.markdown(f'<p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
+    # 顯示圖片
     st.image(base_url + bean["img"], width=400)
     
     st.markdown(f'<p class="story-text">{bean["story"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<span class="flavor-tag">風味：{bean["flavor"]}</span>', unsafe_allow_html=True)
     
+    # 購買按鈕
     st.link_button(f"Order Now", f"https://wa.me/{whatsapp_number}?text=你好，我想購買：{bean['name']}")
     
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # 喺產品之間加分界線
     if i < len(beans) - 1:
         st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
