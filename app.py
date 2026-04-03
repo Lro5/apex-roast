@@ -1,11 +1,10 @@
 import streamlit as st
 
-# 設定網頁標題
-st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕", layout="centered")
+# 【更新 1】將 layout 改為 wide，讓我們有空間將內容靠左
+st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕", layout="wide")
 
 # 基本設定
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
-# 確保背景圖片檔名正確
 wallpaper_url = base_url + "apex-endurance-32.png"
 whatsapp_number = "85263168336"
 
@@ -63,29 +62,35 @@ beans = [
     }
 ]
 
-# CSS 樣式 (修正了 f-string 導致的雙括號問題)
+# CSS 樣式
 st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;700&display=swap');
 
+    /* 頂層背景設定 */
     .stApp {{
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url("{wallpaper_url}");
-        background-size: contain;
-        background-repeat: no-repeat;
+        background: linear-gradient(90deg, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.2) 100%), url("{wallpaper_url}");
+        background-size: cover;
         background-position: center right;
         background-attachment: fixed;
-        background-color: #000000;
         font-family: 'Inter', sans-serif;
     }}
+
+    /* 【更新 2】核心排版：將 Streamlit 預設容器靠左，並限制寬度 */
+    [data-testid="stMainViewContainer"] > section {{
+        padding-left: 5% !important;
+        padding-right: 45% !important; /* 右邊留空，避開背景圖的賽車 */
+    }}
     
+    /* 調整區塊內部文字對齊為靠左 */
     .detail-section {{
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(255, 255, 255, 0.03);
         border-radius: 40px;
         padding: 50px 40px;
         margin-bottom: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        text-align: center;
-        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left; /* 改為靠左對齊 */
+        backdrop-filter: blur(10px);
     }}
 
     .bean-title {{
@@ -109,8 +114,7 @@ st.markdown(f"""
         color: rgba(255, 255, 255, 0.9);
         font-size: 16px;
         line-height: 1.8;
-        max-width: 650px;
-        margin: 0 auto 15px auto;
+        margin-bottom: 15px;
     }}
 
     .story-en {{
@@ -118,16 +122,15 @@ st.markdown(f"""
         font-size: 14px;
         font-style: italic;
         line-height: 1.6;
-        max-width: 600px;
-        margin: 0 auto 30px auto;
+        margin-bottom: 30px;
     }}
     
     .flavor-box {{
-        background: rgba(255, 215, 0, 0.1);
-        border: 1px solid rgba(255, 215, 0, 0.3);
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
         padding: 20px;
         border-radius: 20px;
-        margin: 20px auto 40px auto;
+        margin: 20px 0 40px 0;
         max-width: 500px;
     }}
 
@@ -136,28 +139,30 @@ st.markdown(f"""
         font-size: 16px;
         font-weight: 700;
         display: block;
-        margin-bottom: 5px;
     }}
 
     .flavor-tag-en {{
-        color: rgba(255, 215, 0, 0.7);
+        color: rgba(255, 215, 0, 0.6);
         font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        display: block;
     }}
 
-    [data-testid="stImage"], [data-testid="stImage"] > div, .stImage, .stButton {{
+    /* 清理圖片背景 */
+    [data-testid="stImage"] {{
         background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
     }}
 
     .section-divider {{
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255, 75, 75, 0.4), transparent);
-        margin: 80px auto;
-        width: 70%;
+        background: linear-gradient(90deg, rgba(255, 75, 75, 0.4), transparent);
+        margin: 60px 0;
+        width: 100%;
+    }}
+
+    /* 按鈕靠左 */
+    .stButton {{
+        display: flex;
+        justify-content: flex-start !important;
     }}
 
     .stButton>button {{
@@ -165,24 +170,17 @@ st.markdown(f"""
         color: white !important;
         font-family: 'Michroma', sans-serif !important;
         border-radius: 50px !important;
-        padding: 15px 70px !important;
-        font-size: 16px !important;
+        padding: 15px 50px !important;
+        font-size: 14px !important;
         letter-spacing: 2px !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        transition: 0.4s;
-    }}
-
-    .stButton>button:hover {{
-        transform: scale(1.05);
-        box-shadow: 0 0 30px rgba(255, 30, 30, 0.6) !important;
     }}
     </style>
     """, unsafe_allow_html=True)
 
-# 頂部 Logo
-st.markdown('<div style="text-align: center; padding: 120px 0;">', unsafe_allow_html=True)
-st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: clamp(35px, 7vw, 85px); letter-spacing: 15px; margin: 0; line-height: 1.2;">APEX<br>ROAST</h1>', unsafe_allow_html=True)
-st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 8px; font-weight: 300; font-size: 13px; margin-top: 20px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
+# 頂部 Logo (改為靠左對齊)
+st.markdown('<div style="text-align: left; padding: 80px 0;">', unsafe_allow_html=True)
+st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: clamp(30px, 5vw, 60px); letter-spacing: 10px; margin: 0; line-height: 1.2;">APEX<br>ROAST</h1>', unsafe_allow_html=True)
+st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; font-weight: 300; font-size: 11px; margin-top: 15px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 # 逐款解說
@@ -191,9 +189,10 @@ for i, bean in enumerate(beans):
     
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
-    st.markdown(f'<p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 40px;">{bean["award"]}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color: rgba(255,255,255,0.3); font-size: 13px; margin-bottom: 30px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
-    st.image(base_url + bean["img"], width=450)
+    # 圖片大小稍微調小，適合靠左排版
+    st.image(base_url + bean["img"], width=380)
     
     st.markdown(f'<p class="story-text">{bean["story_zh"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<p class="story-en">{bean["story_en"]}</p>', unsafe_allow_html=True)
@@ -205,11 +204,11 @@ for i, bean in enumerate(beans):
         </div>
     ''', unsafe_allow_html=True)
     
-    st.link_button(f"ORDER NOW", f"https://wa.me/{whatsapp_number}?text=Hello, I would like to order: {bean['name']}")
+    st.button(f"ORDER NOW", key=f"btn_{i}", on_click=lambda b=bean: st.write(f"Redirecting to WhatsApp for {b['name']}..."))
     
     st.markdown('</div>', unsafe_allow_html=True)
 
     if i < len(beans) - 1:
         st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-st.markdown('<p style="text-align: center; color: white; opacity: 0.2; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; padding: 100px;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: left; color: white; opacity: 0.2; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; padding: 50px 0;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
