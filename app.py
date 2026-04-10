@@ -107,6 +107,25 @@ st.markdown(f"""
         border-right: 1px solid rgba(255, 75, 75, 0.2);
     }}
 
+    /* 修正輸入框底色：改為透明灰色、白色文字與紅色聚焦邊框 */
+    input, textarea, [data-baseweb="input"], [data-baseweb="textarea"] {{
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+    }}
+    
+    /* 數量選擇器特別處理 */
+    [data-testid="stNumberInput"] div {{
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }}
+    
+    /* 點擊輸入框時的聚焦效果 */
+    input:focus, textarea:focus {{
+        border-color: #FF4B4B !important;
+        box-shadow: 0 0 0 1px #FF4B4B !important;
+    }}
+
     [data-testid="stMainViewContainer"] > section {{
         padding-left: 5% !important;
         padding-right: 35% !important; 
@@ -126,18 +145,6 @@ st.markdown(f"""
     .price-text {{ color: #FFFFFF; font-family: 'Michroma', sans-serif; font-size: 24px; margin-top: 15px; }}
     .flavor-box {{ background: rgba(255, 215, 0, 0.05); border-left: 3px solid #FFD700; padding: 15px 20px; margin: 20px 0; }}
     
-    .add-cart-btn {{
-        background: transparent;
-        color: #FF4B4B !important;
-        border: 1px solid #FF4B4B;
-        padding: 10px 25px;
-        border-radius: 50px;
-        font-family: 'Michroma', sans-serif;
-        font-size: 12px;
-        cursor: pointer;
-        transition: 0.3s;
-    }}
-    
     .checkout-btn {{
         display: block;
         width: 100%;
@@ -149,6 +156,15 @@ st.markdown(f"""
         font-family: 'Michroma', sans-serif;
         text-decoration: none;
         margin-top: 20px;
+        transition: 0.3s;
+    }}
+    .checkout-btn:hover {{ filter: brightness(1.2); transform: scale(1.02); }}
+
+    /* 加強按鈕文字顏色確保可讀性 */
+    .stButton>button {{
+        color: white !important;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }}
     </style>
     """, unsafe_allow_html=True)
@@ -181,9 +197,9 @@ with st.sidebar:
         
         # 收集用戶資料
         st.markdown('<p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top:20px;">SHIPPING INFO / 收件資訊</p>', unsafe_allow_html=True)
-        u_name = st.text_input("Name / 姓名")
-        u_phone = st.text_input("Phone / 電話")
-        u_addr = st.text_area("Address / 地址 (含順豐站編碼)")
+        u_name = st.text_input("Name / 姓名", placeholder="請輸入姓名")
+        u_phone = st.text_input("Phone / 電話", placeholder="請輸入聯絡電話")
+        u_addr = st.text_area("Address / 地址", placeholder="請填寫完整地址 (含順豐站編碼)")
         
         if st.button("清空購物車 Clear Cart"):
             st.session_state.cart = {}
