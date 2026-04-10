@@ -10,8 +10,8 @@ st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕",
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-endurance-32.png"
 
-# 請在這裡填入你的收箱 Email 地址
-your_email = "your-email@example.com" 
+# 已更新為您的收箱 Email 地址
+your_email = "hirosenno@gmail.com" 
 
 # 深度資料庫
 beans = [
@@ -250,7 +250,7 @@ Thank you! (謝謝！)
     # URL 編碼處理
     mail_to_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
     
-    # 修改後的按鈕：發送雙語 Email
+    # 發送雙語 Email 按鈕
     st.markdown(f'<a href="{mail_to_link}" class="order-btn">SEND EMAIL ORDER (中英訂購)</a>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
