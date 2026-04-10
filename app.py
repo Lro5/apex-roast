@@ -107,36 +107,28 @@ st.markdown(f"""
         border-right: 1px solid rgba(255, 75, 75, 0.2);
     }}
 
-    /* 全面移除白色底色：針對 text_input, text_area, number_input */
-    /* 這裡使用透明度高的深灰色，配合網站整體黑紅風格 */
-    div[data-baseweb="input"], div[data-baseweb="textarea"] {{
-        background-color: rgba(255, 255, 255, 0.07) !important;
-        border-radius: 8px !important;
+    /* 強制修正：徹底移除所有輸入框的白色底色 */
+    /* 針對所有 Streamlit 的輸入組件背景進行強制深色化 */
+    div[data-baseweb="input"], 
+    div[data-baseweb="textarea"], 
+    div[data-baseweb="base-input"],
+    .stNumberInput div {{
+        background-color: rgba(30, 30, 30, 0.8) !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
     }}
 
+    /* 鎖定輸入框內的實體 input 標籤 */
     input, textarea {{
         background-color: transparent !important;
         color: white !important;
-        font-family: 'Inter', sans-serif !important;
+        -webkit-text-fill-color: white !important; /* 解決部分瀏覽器強制填充問題 */
     }}
 
-    /* 數量選擇器的中間數字區塊 */
-    div[data-testid="stNumberInputContainer"] {{
-        background-color: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 8px !important;
-    }}
-
-    /* 當輸入框獲得焦點時的邊框顏色變為紅色 */
-    div[data-baseweb="input"]:focus-within, div[data-baseweb="textarea"]:focus-within {{
+    /* 針對點擊後的白色背景進行修正 */
+    div[data-baseweb="input"]:focus-within, 
+    div[data-baseweb="textarea"]:focus-within {{
+        background-color: rgba(45, 45, 45, 0.9) !important;
         border-color: #FF4B4B !important;
-        box-shadow: 0 0 0 1px #FF4B4B !important;
-    }}
-
-    /* Placeholder 顏色調整 */
-    ::placeholder {{
-        color: rgba(255, 255, 255, 0.4) !important;
     }}
 
     [data-testid="stMainViewContainer"] > section {{
@@ -173,7 +165,6 @@ st.markdown(f"""
     }}
     .checkout-btn:hover {{ filter: brightness(1.2); transform: scale(1.02); }}
 
-    /* 加強按鈕文字顏色確保可讀性 */
     .stButton>button {{
         color: white !important;
         background-color: rgba(255, 255, 255, 0.1);
@@ -235,10 +226,10 @@ Phone: {u_phone}
 Address: {u_addr}
 --------------------------------------------------
 """
-        mail_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
+        mail_to_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
         
         if u_name and u_phone and u_addr:
-            st.markdown(f'<a href="{mail_link}" class="checkout-btn">PROCEED TO EMAIL ORDER</a>', unsafe_allow_html=True)
+            st.markdown(f'<a href="{mail_to_link}" class="checkout-btn">PROCEED TO EMAIL ORDER</a>', unsafe_allow_html=True)
         else:
             st.warning("請填寫收件資訊以啟動下單按鈕")
 
@@ -256,7 +247,6 @@ for i, bean in enumerate(beans):
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     
     st.image(base_url + bean["img"], width=320)
-    
     st.markdown(f'<p class="story-zh">{bean["story_zh"]}</p>', unsafe_allow_html=True)
     
     st.markdown(f'''
@@ -268,16 +258,13 @@ for i, bean in enumerate(beans):
     st.markdown(f'<div class="price-text">HKD ${bean["price"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="weight-text" style="color: rgba(255,255,255,0.4); margin-bottom: 20px;">規格：{bean["weight"]}</div>', unsafe_allow_html=True)
 
-    # 數量與加入購物車
     col1, col2 = st.columns([1, 2])
     with col1:
-        # number_input 也同步套用了深色透明風格
         qty = st.number_input("數量", min_value=1, max_value=20, value=1, key=f"qty_{i}")
     with col2:
-        st.write("") # 垂直對齊
+        st.write("") 
         st.write("") 
         if st.button(f"ADD TO CART", key=f"btn_{i}"):
-            # 更新購物車邏輯
             if bean["name"] in st.session_state.cart:
                 st.session_state.cart[bean["name"]]['qty'] += qty
             else:
