@@ -101,14 +101,12 @@ st.markdown(f"""
         font-family: 'Inter', sans-serif;
     }}
 
-    /* 購物車側邊欄風格 */
     [data-testid="stSidebar"] {{
         background-color: rgba(15, 15, 15, 0.95) !important;
         border-right: 1px solid rgba(255, 75, 75, 0.2);
     }}
 
-    /* 強制修正：徹底移除所有輸入框的白色底色 */
-    /* 針對所有 Streamlit 的輸入組件背景進行強制深色化 */
+    /* 輸入框深色設定 */
     div[data-baseweb="input"], 
     div[data-baseweb="textarea"], 
     div[data-baseweb="base-input"],
@@ -117,14 +115,12 @@ st.markdown(f"""
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
     }}
 
-    /* 鎖定輸入框內的實體 input 標籤 */
     input, textarea {{
         background-color: transparent !important;
         color: white !important;
-        -webkit-text-fill-color: white !important; /* 解決部分瀏覽器強制填充問題 */
+        -webkit-text-fill-color: white !important;
     }}
 
-    /* 針對點擊後的白色背景進行修正 */
     div[data-baseweb="input"]:focus-within, 
     div[data-baseweb="textarea"]:focus-within {{
         background-color: rgba(45, 45, 45, 0.9) !important;
@@ -174,7 +170,7 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 側邊欄：購物車系統
+# 側邊欄：購物車系統（含即時修正功能）
 # ==========================================
 with st.sidebar:
     st.markdown('<h2 style="color: white; font-family: \'Michroma\';">YOUR CART</h2>', unsafe_allow_html=True)
@@ -185,18 +181,40 @@ with st.sidebar:
     else:
         grand_total = 0
         items_summary = ""
-        for name, info in st.session_state.cart.items():
+        
+        # 遍歷購物車商品
+        for name in list(st.session_state.cart.keys()):
+            info = st.session_state.cart[name]
             item_total = info['price'] * info['qty']
             grand_total += item_total
+            
+            # 商品資訊顯示
             st.markdown(f"""
-            <div style="margin-bottom: 15px;">
+            <div style="margin-bottom: 5px;">
                 <p style="color: white; margin-bottom: 0;"><b>{name}</b></p>
-                <p style="color: #FF4B4B; font-size: 14px;">HKD ${info['price']} x {info['qty']} = ${item_total}</p>
+                <p style="color: #FF4B4B; font-size: 14px; margin-bottom: 5px;">HKD ${info['price']} x {info['qty']} = ${item_total}</p>
             </div>
             """, unsafe_allow_html=True)
-            items_summary += f"- {info['name_en']}: {info['qty']} bag(s) (HKD ${item_total})\n"
+            
+            # 即時修正按鈕 (減 1 與 刪除)
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button(f"減 1 袋", key=f"minus_{name}"):
+                    if st.session_state.cart[name]['qty'] > 1:
+                        st.session_state.cart[name]['qty'] -= 1
+                    else:
+                        del st.session_state.cart[name]
+                    st.rerun()
+            with c2:
+                if st.button(f"移除此項", key=f"del_{name}"):
+                    del st.session_state.cart[name]
+                    st.rerun()
+            
+            st.markdown('<div style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>', unsafe_allow_html=True)
+            
+            if name in st.session_state.cart: # 如果沒被刪除，加入結帳清單
+                items_summary += f"- {info['name_en']}: {info['qty']} bag(s) (HKD ${item_total})\n"
         
-        st.markdown('---')
         st.markdown(f'<h3 style="color: white;">TOTAL: HKD ${grand_total}</h3>', unsafe_allow_html=True)
         
         # 收集用戶資料
