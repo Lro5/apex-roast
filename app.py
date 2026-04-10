@@ -1,16 +1,20 @@
 import streamlit as st
-import urllib.parse  # 用於處理 Email 文字格式
+import urllib.parse
 
 # 設定網頁標題
 st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕", layout="wide")
+
+# ==========================================
+# 初始化購物車 (Session State)
+# ==========================================
+if 'cart' not in st.session_state:
+    st.session_state.cart = {}
 
 # ==========================================
 # 基本設定
 # ==========================================
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-endurance-32.png"
-
-# 已更新為您的收箱 Email 地址
 your_email = "hirosenno@gmail.com" 
 
 # 深度資料庫
@@ -97,9 +101,15 @@ st.markdown(f"""
         font-family: 'Inter', sans-serif;
     }}
 
+    /* 購物車側邊欄風格 */
+    [data-testid="stSidebar"] {{
+        background-color: rgba(15, 15, 15, 0.95) !important;
+        border-right: 1px solid rgba(255, 75, 75, 0.2);
+    }}
+
     [data-testid="stMainViewContainer"] > section {{
         padding-left: 5% !important;
-        padding-right: 50% !important; 
+        padding-right: 35% !important; 
     }}
     
     .detail-section {{
@@ -111,151 +121,144 @@ st.markdown(f"""
         backdrop-filter: blur(10px);
     }}
 
-    .bean-title {{
-        color: #FFFFFF !important;
+    .bean-title {{ color: #FFFFFF !important; font-family: 'Michroma', sans-serif; font-size: 26px; margin-bottom: 5px; }}
+    .origin-label {{ color: #FF4B4B; font-family: 'Michroma', sans-serif; letter-spacing: 3px; font-size: 14px; margin-bottom: 20px; text-transform: uppercase; }}
+    .price-text {{ color: #FFFFFF; font-family: 'Michroma', sans-serif; font-size: 24px; margin-top: 15px; }}
+    .flavor-box {{ background: rgba(255, 215, 0, 0.05); border-left: 3px solid #FFD700; padding: 15px 20px; margin: 20px 0; }}
+    
+    .add-cart-btn {{
+        background: transparent;
+        color: #FF4B4B !important;
+        border: 1px solid #FF4B4B;
+        padding: 10px 25px;
+        border-radius: 50px;
         font-family: 'Michroma', sans-serif;
-        font-size: 26px;
-        margin-bottom: 5px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: 0.3s;
     }}
     
-    .origin-label {{
-        color: #FF4B4B;
-        font-family: 'Michroma', sans-serif;
-        letter-spacing: 3px;
-        font-size: 14px;
-        margin-bottom: 20px;
-        text-transform: uppercase;
-    }}
-
-    .story-zh {{
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 15px;
-        line-height: 1.7;
-        margin: 20px 0 10px 0;
-    }}
-
-    .story-en {{
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 13px;
-        font-style: italic;
-        line-height: 1.5;
-        margin-bottom: 20px;
-    }}
-
-    .price-text {{
-        color: #FFFFFF;
-        font-family: 'Michroma', sans-serif;
-        font-size: 24px;
-        margin-top: 15px;
-    }}
-
-    .weight-text {{
-        color: rgba(255,255,255,0.4);
-        font-size: 14px;
-        margin-bottom: 20px;
-    }}
-    
-    .flavor-box {{
-        background: rgba(255, 215, 0, 0.05);
-        border-left: 3px solid #FFD700;
-        padding: 15px 20px;
-        margin: 20px 0;
-    }}
-
-    .order-btn {{
-        display: inline-block;
+    .checkout-btn {{
+        display: block;
+        width: 100%;
         background: linear-gradient(135deg, #FF1E1E 0%, #8B0000 100%);
         color: white !important;
+        text-align: center;
+        padding: 15px;
+        border-radius: 10px;
         font-family: 'Michroma', sans-serif;
         text-decoration: none;
-        padding: 16px 45px;
-        border-radius: 50px;
-        font-size: 13px;
-        letter-spacing: 2px;
-        box-shadow: 0 4px 15px rgba(255, 30, 30, 0.3);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.1);
-        text-align: center;
-        margin-top: 10px;
+        margin-top: 20px;
     }}
-
-    .order-btn:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(255, 30, 30, 0.5);
-        filter: brightness(1.1);
-    }}
-
-    .stNumberInput label {{ color: rgba(255,255,255,0.6) !important; font-size: 12px !important; }}
     </style>
     """, unsafe_allow_html=True)
 
-# 頂部 Logo
+# ==========================================
+# 側邊欄：購物車系統
+# ==========================================
+with st.sidebar:
+    st.markdown('<h2 style="color: white; font-family: \'Michroma\';">YOUR CART</h2>', unsafe_allow_html=True)
+    st.markdown('---')
+    
+    if not st.session_state.cart:
+        st.write("您的購物車是空的 / Cart is empty")
+    else:
+        grand_total = 0
+        items_summary = ""
+        for name, info in st.session_state.cart.items():
+            item_total = info['price'] * info['qty']
+            grand_total += item_total
+            st.markdown(f"""
+            <div style="margin-bottom: 15px;">
+                <p style="color: white; margin-bottom: 0;"><b>{name}</b></p>
+                <p style="color: #FF4B4B; font-size: 14px;">HKD ${info['price']} x {info['qty']} = ${item_total}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            items_summary += f"- {info['name_en']}: {info['qty']} bag(s) (HKD ${item_total})\n"
+        
+        st.markdown('---')
+        st.markdown(f'<h3 style="color: white;">TOTAL: HKD ${grand_total}</h3>', unsafe_allow_html=True)
+        
+        # 收集用戶資料
+        st.markdown('<p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top:20px;">SHIPPING INFO / 收件資訊</p>', unsafe_allow_html=True)
+        u_name = st.text_input("Name / 姓名")
+        u_phone = st.text_input("Phone / 電話")
+        u_addr = st.text_area("Address / 地址 (含順豐站編碼)")
+        
+        if st.button("清空購物車 Clear Cart"):
+            st.session_state.cart = {}
+            st.rerun()
+
+        # 整合 Email 內容
+        email_subject = f"New Order from {u_name if u_name else 'Customer'}"
+        email_body = f"""Dear Apex Roast Team,
+
+New order details:
+--------------------------------------------------
+{items_summary}
+--------------------------------------------------
+GRAND TOTAL: HKD ${grand_total}
+
+Shipping Information:
+--------------------------------------------------
+Name: {u_name}
+Phone: {u_phone}
+Address: {u_addr}
+--------------------------------------------------
+"""
+        mail_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
+        
+        if u_name and u_phone and u_addr:
+            st.markdown(f'<a href="{mail_link}" class="checkout-btn">PROCEED TO EMAIL ORDER</a>', unsafe_allow_html=True)
+        else:
+            st.warning("請填寫收件資訊以啟動下單按鈕")
+
+# ==========================================
+# 主頁面內容
+# ==========================================
 st.markdown('<div style="text-align: left; padding: 60px 0;">', unsafe_allow_html=True)
 st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: 45px; letter-spacing: 8px; margin: 0;">APEX ROAST</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; font-size: 10px; margin-top: 10px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
-st.markdown('<p style="color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 500; letter-spacing: 2px; margin-top: 15px; border-left: 3px solid #FF4B4B; padding-left: 15px;">PRIVATE COFFEE ROASTERY | 精品咖啡豆專供</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 逐款解說
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
-    
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
-    st.markdown(f'<p style="color: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 25px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
     st.image(base_url + bean["img"], width=320)
     
     st.markdown(f'<p class="story-zh">{bean["story_zh"]}</p>', unsafe_allow_html=True)
-    st.markdown(f'<p class="story-en">{bean["story_en"]}</p>', unsafe_allow_html=True)
     
     st.markdown(f'''
         <div class="flavor-box">
-            <span style="color: #FFD700; font-weight: 700; font-size: 15px;">風味：{bean["flavor_zh"]}</span><br>
-            <span style="color: rgba(255, 215, 0, 0.5); font-size: 11px; text-transform: uppercase;">{bean["flavor_en"]}</span>
+            <span style="color: #FFD700; font-weight: 700; font-size: 15px;">風味：{bean["flavor_zh"]}</span>
         </div>
     ''', unsafe_allow_html=True)
     
     st.markdown(f'<div class="price-text">HKD ${bean["price"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="weight-text">包裝規格：{bean["weight"]} / 袋</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="weight-text" style="color: rgba(255,255,255,0.4); margin-bottom: 20px;">規格：{bean["weight"]}</div>', unsafe_allow_html=True)
 
-    # 數量選擇器
+    # 數量與加入購物車
     col1, col2 = st.columns([1, 2])
     with col1:
-        count = st.number_input("數量 / Qty", min_value=1, max_value=20, value=1, key=f"num_{i}")
-    
-    total = bean["price"] * count
-    st.markdown(f'<p style="color: rgba(255,255,255,0.7); font-size: 14px;">小計 (Subtotal)：HKD ${total}</p>', unsafe_allow_html=True)
-    
-    # 建立 Email 下單內容 (中英雙語對照版)
-    email_subject = f"Apex Roast Order: {bean['name_en']}"
-    email_body = f"""Dear Apex Roast Team,
+        qty = st.number_input("數量", min_value=1, max_value=20, value=1, key=f"qty_{i}")
+    with col2:
+        st.write("") # 垂直對齊
+        st.write("") 
+        if st.button(f"ADD TO CART", key=f"btn_{i}"):
+            # 更新購物車邏輯
+            if bean["name"] in st.session_state.cart:
+                st.session_state.cart[bean["name"]]['qty'] += qty
+            else:
+                st.session_state.cart[bean["name"]] = {
+                    "name_en": bean["name_en"],
+                    "price": bean["price"],
+                    "qty": qty
+                }
+            st.toast(f"已加入: {bean['name']}")
+            st.rerun()
 
-I would like to order the following coffee beans (我想訂購以下精品咖啡豆):
---------------------------------------------------
-Product (產品): {bean['name_en']} ({bean['name']})
-Quantity (數量): {count} bag(s)
-Total (總價): HKD ${total}
-
-Shipping Information (收件資訊):
---------------------------------------------------
-Name (姓名): 
-Phone (電話): 
-Address (收貨地址): 
-(For HK SF Express, please provide station code if applicable.)
---------------------------------------------------
-Thank you! (謝謝！)
-"""
-    
-    # URL 編碼處理
-    mail_to_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
-    
-    # 發送雙語 Email 按鈕
-    st.markdown(f'<a href="{mail_to_link}" class="order-btn">SEND EMAIL ORDER (中英訂購)</a>', unsafe_allow_html=True)
-    
     st.markdown('</div>', unsafe_allow_html=True)
 
-    if i < len(beans) - 1:
-        st.markdown('<div style="height: 40px; border-bottom: 1px solid rgba(255,75,75,0.1); margin-bottom: 40px;"></div>', unsafe_allow_html=True)
-
-st.markdown('<p style="text-align: left; color: white; opacity: 0.1; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; padding: 60px 0;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: left; color: white; opacity: 0.1; font-family: \'Michroma\'; letter-spacing: 5px; padding: 60px 0;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
