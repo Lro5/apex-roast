@@ -1,15 +1,17 @@
 import streamlit as st
+import urllib.parse  # 用於處理 Email 文字格式
 
 # 設定網頁標題
 st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕", layout="wide")
 
 # ==========================================
-# 基本設定 (請在這裡填入你的 Google 表單連結)
+# 基本設定
 # ==========================================
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-endurance-32.png"
-# 請將下方引號內的網址換成你建立好的 Google Form 連結
-google_form_url = "https://forms.gle/你的表單連結" 
+
+# 請在這裡填入你的收箱 Email 地址
+your_email = "your-email@example.com" 
 
 # 深度資料庫
 beans = [
@@ -220,9 +222,30 @@ for i, bean in enumerate(beans):
     total = bean["price"] * count
     st.markdown(f'<p style="color: rgba(255,255,255,0.7); font-size: 14px;">小計：HKD ${total}</p>', unsafe_allow_html=True)
     
-    # 修改後的按鈕：跳轉至 Google 表單
-    # 這裡可以透過網址參數預填表單（進階做法），目前先設定直接跳轉
-    st.markdown(f'<a href="{google_form_url}" target="_blank" class="order-btn">ORDER NOW</a>', unsafe_allow_html=True)
+    # 建立 Email 下單內容邏輯
+    email_subject = f"Apex Roast Order: {bean['name']}"
+    email_body = f"""你好 Apex Roast，
+
+我想訂購以下精品咖啡豆：
+----------------------------------
+產品：{bean['name']}
+數量：{count} 袋
+小計：HKD ${total}
+
+收件資訊：
+姓名：
+電話：
+收貨地址：
+(如選擇順豐，請填寫順豐站/智能櫃代碼)
+----------------------------------
+期待你們的咖啡，謝謝！
+"""
+    
+    # URL 編碼處理
+    mail_to_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
+    
+    # 修改後的按鈕：改為發送 Email
+    st.markdown(f'<a href="{mail_to_link}" class="order-btn">SEND EMAIL ORDER</a>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
