@@ -107,23 +107,36 @@ st.markdown(f"""
         border-right: 1px solid rgba(255, 75, 75, 0.2);
     }}
 
-    /* 修正輸入框底色：改為透明灰色、白色文字與紅色聚焦邊框 */
-    input, textarea, [data-baseweb="input"], [data-baseweb="textarea"] {{
-        background-color: rgba(255, 255, 255, 0.05) !important;
+    /* 全面移除白色底色：針對 text_input, text_area, number_input */
+    /* 這裡使用透明度高的深灰色，配合網站整體黑紅風格 */
+    div[data-baseweb="input"], div[data-baseweb="textarea"] {{
+        background-color: rgba(255, 255, 255, 0.07) !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }}
+
+    input, textarea {{
+        background-color: transparent !important;
         color: white !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        font-family: 'Inter', sans-serif !important;
+    }}
+
+    /* 數量選擇器的中間數字區塊 */
+    div[data-testid="stNumberInputContainer"] {{
+        background-color: rgba(255, 255, 255, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 8px !important;
     }}
-    
-    /* 數量選擇器特別處理 */
-    [data-testid="stNumberInput"] div {{
-        background-color: rgba(255, 255, 255, 0.05) !important;
-    }}
-    
-    /* 點擊輸入框時的聚焦效果 */
-    input:focus, textarea:focus {{
+
+    /* 當輸入框獲得焦點時的邊框顏色變為紅色 */
+    div[data-baseweb="input"]:focus-within, div[data-baseweb="textarea"]:focus-within {{
         border-color: #FF4B4B !important;
         box-shadow: 0 0 0 1px #FF4B4B !important;
+    }}
+
+    /* Placeholder 顏色調整 */
+    ::placeholder {{
+        color: rgba(255, 255, 255, 0.4) !important;
     }}
 
     [data-testid="stMainViewContainer"] > section {{
@@ -258,6 +271,7 @@ for i, bean in enumerate(beans):
     # 數量與加入購物車
     col1, col2 = st.columns([1, 2])
     with col1:
+        # number_input 也同步套用了深色透明風格
         qty = st.number_input("數量", min_value=1, max_value=20, value=1, key=f"qty_{i}")
     with col2:
         st.write("") # 垂直對齊
