@@ -3,10 +3,13 @@ import streamlit as st
 # 設定網頁標題
 st.set_page_config(page_title="Apex Roast | Private Selection", page_icon="☕", layout="wide")
 
-# 基本設定
+# ==========================================
+# 基本設定 (請在這裡填入你的 Google 表單連結)
+# ==========================================
 base_url = "https://raw.githubusercontent.com/Lro5/apex-roast/main/"
 wallpaper_url = base_url + "apex-endurance-32.png"
-whatsapp_number = "85263168336"
+# 請將下方引號內的網址換成你建立好的 Google Form 連結
+google_form_url = "https://forms.gle/你的表單連結" 
 
 # 深度資料庫
 beans = [
@@ -183,29 +186,22 @@ st.markdown(f"""
 st.markdown('<div style="text-align: left; padding: 60px 0;">', unsafe_allow_html=True)
 st.markdown('<h1 style="color: white; font-family: \'Michroma\', sans-serif; font-size: 45px; letter-spacing: 8px; margin: 0;">APEX ROAST</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #FF4B4B; font-family: \'Michroma\', sans-serif; letter-spacing: 5px; font-size: 10px; margin-top: 10px;">THE CHAMPION SELECTION</p>', unsafe_allow_html=True)
-
-# 這裡調整了字體大小 (18px) 和字距 (2px)
 st.markdown('<p style="color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 500; letter-spacing: 2px; margin-top: 15px; border-left: 3px solid #FF4B4B; padding-left: 15px;">PRIVATE COFFEE ROASTERY | 精品咖啡豆專供</p>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
-
 
 # 逐款解說
 for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
     
-    # 產地標籤與標題
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
     st.markdown(f'<p style="color: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 25px;">{bean["award"]}</p>', unsafe_allow_html=True)
     
-    # 圖片
     st.image(base_url + bean["img"], width=320)
     
-    # 【修正點】重新加入產地描述細節 (Story)
     st.markdown(f'<p class="story-zh">{bean["story_zh"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<p class="story-en">{bean["story_en"]}</p>', unsafe_allow_html=True)
     
-    # 風味盒
     st.markdown(f'''
         <div class="flavor-box">
             <span style="color: #FFD700; font-weight: 700; font-size: 15px;">風味：{bean["flavor_zh"]}</span><br>
@@ -213,7 +209,6 @@ for i, bean in enumerate(beans):
         </div>
     ''', unsafe_allow_html=True)
     
-    # 價格與重量
     st.markdown(f'<div class="price-text">HKD ${bean["price"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="weight-text">包裝規格：{bean["weight"]} / 袋</div>', unsafe_allow_html=True)
 
@@ -225,11 +220,9 @@ for i, bean in enumerate(beans):
     total = bean["price"] * count
     st.markdown(f'<p style="color: rgba(255,255,255,0.7); font-size: 14px;">小計：HKD ${total}</p>', unsafe_allow_html=True)
     
-    # WhatsApp 連結
-    msg = f"你好，我想訂購：\n- {bean['name']}\n- 數量：{count} 袋\n- 總價：HKD ${total}"
-    wa_url = f"https://wa.me/{whatsapp_number}?text={msg.replace(' ', '%20').replace('\\n', '%0A')}"
-    
-    st.markdown(f'<a href="{wa_url}" target="_blank" class="order-btn">ORDER NOW</a>', unsafe_allow_html=True)
+    # 修改後的按鈕：跳轉至 Google 表單
+    # 這裡可以透過網址參數預填表單（進階做法），目前先設定直接跳轉
+    st.markdown(f'<a href="{google_form_url}" target="_blank" class="order-btn">ORDER NOW</a>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
