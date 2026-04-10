@@ -17,6 +17,7 @@ your_email = "your-email@example.com"
 beans = [
     {
         "name": "衣索匹亞 罕貝拉 可如蜜",
+        "name_en": "Ethiopia Hambela Kurume",
         "img": "bean1.png",
         "origin": "ETHIOPIA HAMBELA",
         "price": 168,
@@ -29,6 +30,7 @@ beans = [
     },
     {
         "name": "衣索匹亞 吉馬",
+        "name_en": "Ethiopia Djimmah",
         "img": "bean2.png",
         "origin": "ETHIOPIA DJIMMAH",
         "price": 158,
@@ -41,6 +43,7 @@ beans = [
     },
     {
         "name": "巴拿馬 翡翠莊園 拉米約",
+        "name_en": "Panama Esmeralda Laramillo",
         "img": "bean3.png",
         "origin": "PANAMA ESME LARAMILLO",
         "price": 328,
@@ -53,6 +56,7 @@ beans = [
     },
     {
         "name": "巴拿馬 翡翠莊園 坎納斯",
+        "name_en": "Panama Esmeralda Cañas Verdes",
         "img": "bean4.png",
         "origin": "PANAMA ESME CANAS",
         "price": 358,
@@ -65,6 +69,7 @@ beans = [
     },
     {
         "name": "衣索匹亞 西達碼 邦娜",
+        "name_en": "Ethiopia Sidama Bonna",
         "img": "bean5.png",
         "origin": "ETHIOPIA SIDAMA BONNA",
         "price": 148,
@@ -220,32 +225,33 @@ for i, bean in enumerate(beans):
         count = st.number_input("數量 / Qty", min_value=1, max_value=20, value=1, key=f"num_{i}")
     
     total = bean["price"] * count
-    st.markdown(f'<p style="color: rgba(255,255,255,0.7); font-size: 14px;">小計：HKD ${total}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color: rgba(255,255,255,0.7); font-size: 14px;">小計 (Subtotal)：HKD ${total}</p>', unsafe_allow_html=True)
     
-    # 建立 Email 下單內容邏輯
-    email_subject = f"Apex Roast Order: {bean['name']}"
-    email_body = f"""你好 Apex Roast，
+    # 建立 Email 下單內容 (中英雙語對照版)
+    email_subject = f"Apex Roast Order: {bean['name_en']}"
+    email_body = f"""Dear Apex Roast Team,
 
-我想訂購以下精品咖啡豆：
-----------------------------------
-產品：{bean['name']}
-數量：{count} 袋
-小計：HKD ${total}
+I would like to order the following coffee beans (我想訂購以下精品咖啡豆):
+--------------------------------------------------
+Product (產品): {bean['name_en']} ({bean['name']})
+Quantity (數量): {count} bag(s)
+Total (總價): HKD ${total}
 
-收件資訊：
-姓名：
-電話：
-收貨地址：
-(如選擇順豐，請填寫順豐站/智能櫃代碼)
-----------------------------------
-期待你們的咖啡，謝謝！
+Shipping Information (收件資訊):
+--------------------------------------------------
+Name (姓名): 
+Phone (電話): 
+Address (收貨地址): 
+(For HK SF Express, please provide station code if applicable.)
+--------------------------------------------------
+Thank you! (謝謝！)
 """
     
     # URL 編碼處理
     mail_to_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
     
-    # 修改後的按鈕：改為發送 Email
-    st.markdown(f'<a href="{mail_to_link}" class="order-btn">SEND EMAIL ORDER</a>', unsafe_allow_html=True)
+    # 修改後的按鈕：發送雙語 Email
+    st.markdown(f'<a href="{mail_to_link}" class="order-btn">SEND EMAIL ORDER (中英訂購)</a>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
