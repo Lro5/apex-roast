@@ -165,12 +165,13 @@ st.markdown(f"""
         color: white !important;
         background-color: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 100%;
     }}
     </style>
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 側邊欄：購物車系統（含即時修正功能）
+# 側邊欄：購物車系統（符號化控制版）
 # ==========================================
 with st.sidebar:
     st.markdown('<h2 style="color: white; font-family: \'Michroma\';">YOUR CART</h2>', unsafe_allow_html=True)
@@ -182,43 +183,45 @@ with st.sidebar:
         grand_total = 0
         items_summary = ""
         
-        # 遍歷購物車商品
         for name in list(st.session_state.cart.keys()):
             info = st.session_state.cart[name]
             item_total = info['price'] * info['qty']
             grand_total += item_total
             
-            # 商品資訊顯示
             st.markdown(f"""
-            <div style="margin-bottom: 5px;">
-                <p style="color: white; margin-bottom: 0;"><b>{name}</b></p>
-                <p style="color: #FF4B4B; font-size: 14px; margin-bottom: 5px;">HKD ${info['price']} x {info['qty']} = ${item_total}</p>
+            <div style="margin-bottom: 2px;">
+                <p style="color: white; margin-bottom: 0; font-size: 15px;"><b>{name}</b></p>
+                <p style="color: #FF4B4B; font-size: 13px; margin-bottom: 8px;">HKD ${info['price']} x {info['qty']} = ${item_total}</p>
             </div>
             """, unsafe_allow_html=True)
             
-            # 即時修正按鈕 (減 1 與 刪除)
-            c1, c2 = st.columns(2)
+            # 符號化控制列：[ － ] [ ＋ ] [ 移除 ]
+            c1, c2, c3 = st.columns([1, 1, 2])
             with c1:
-                if st.button(f"減 1 袋", key=f"minus_{name}"):
+                if st.button("－", key=f"min_{name}"):
                     if st.session_state.cart[name]['qty'] > 1:
                         st.session_state.cart[name]['qty'] -= 1
                     else:
                         del st.session_state.cart[name]
                     st.rerun()
             with c2:
-                if st.button(f"移除此項", key=f"del_{name}"):
+                if st.button("＋", key=f"plus_{name}"):
+                    st.session_state.cart[name]['qty'] += 1
+                    st.rerun()
+            with c3:
+                if st.button("移除", key=f"del_{name}"):
                     del st.session_state.cart[name]
                     st.rerun()
             
-            st.markdown('<div style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>', unsafe_allow_html=True)
+            st.markdown('<div style="margin: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>', unsafe_allow_html=True)
             
-            if name in st.session_state.cart: # 如果沒被刪除，加入結帳清單
+            if name in st.session_state.cart:
                 items_summary += f"- {info['name_en']}: {info['qty']} bag(s) (HKD ${item_total})\n"
         
-        st.markdown(f'<h3 style="color: white;">TOTAL: HKD ${grand_total}</h3>', unsafe_allow_html=True)
+        st.markdown(f'<h3 style="color: white; margin-top: 10px;">TOTAL: HKD ${grand_total}</h3>', unsafe_allow_html=True)
         
         # 收集用戶資料
-        st.markdown('<p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top:20px;">SHIPPING INFO / 收件資訊</p>', unsafe_allow_html=True)
+        st.markdown('<p style="color: rgba(255,255,255,0.6); font-size: 11px; margin-top:20px; letter-spacing:1px;">SHIPPING INFO / 收件資訊</p>', unsafe_allow_html=True)
         u_name = st.text_input("Name / 姓名", placeholder="請輸入姓名")
         u_phone = st.text_input("Phone / 電話", placeholder="請輸入聯絡電話")
         u_addr = st.text_area("Address / 地址", placeholder="請填寫完整地址 (含順豐站編碼)")
@@ -227,23 +230,9 @@ with st.sidebar:
             st.session_state.cart = {}
             st.rerun()
 
-        # 整合 Email 內容
+        # Email 整合
         email_subject = f"New Order from {u_name if u_name else 'Customer'}"
-        email_body = f"""Dear Apex Roast Team,
-
-New order details:
---------------------------------------------------
-{items_summary}
---------------------------------------------------
-GRAND TOTAL: HKD ${grand_total}
-
-Shipping Information:
---------------------------------------------------
-Name: {u_name}
-Phone: {u_phone}
-Address: {u_addr}
---------------------------------------------------
-"""
+        email_body = f"Dear Apex Roast Team,\n\nNew order details:\n{items_summary}\nGRAND TOTAL: HKD ${grand_total}\n\nShipping:\nName: {u_name}\nPhone: {u_phone}\nAddress: {u_addr}"
         mail_to_link = f"mailto:{your_email}?subject={urllib.parse.quote(email_subject)}&body={urllib.parse.quote(email_body)}"
         
         if u_name and u_phone and u_addr:
@@ -263,16 +252,9 @@ for i, bean in enumerate(beans):
     st.markdown(f'<div class="detail-section">', unsafe_allow_html=True)
     st.markdown(f'<p class="origin-label">{bean["origin"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<h2 class="bean-title">{bean["name"]}</h2>', unsafe_allow_html=True)
-    
     st.image(base_url + bean["img"], width=320)
     st.markdown(f'<p class="story-zh">{bean["story_zh"]}</p>', unsafe_allow_html=True)
-    
-    st.markdown(f'''
-        <div class="flavor-box">
-            <span style="color: #FFD700; font-weight: 700; font-size: 15px;">風味：{bean["flavor_zh"]}</span>
-        </div>
-    ''', unsafe_allow_html=True)
-    
+    st.markdown(f'<div class="flavor-box"><span style="color: #FFD700; font-weight: 700; font-size: 15px;">風味：{bean["flavor_zh"]}</span></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="price-text">HKD ${bean["price"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="weight-text" style="color: rgba(255,255,255,0.4); margin-bottom: 20px;">規格：{bean["weight"]}</div>', unsafe_allow_html=True)
 
@@ -286,14 +268,9 @@ for i, bean in enumerate(beans):
             if bean["name"] in st.session_state.cart:
                 st.session_state.cart[bean["name"]]['qty'] += qty
             else:
-                st.session_state.cart[bean["name"]] = {
-                    "name_en": bean["name_en"],
-                    "price": bean["price"],
-                    "qty": qty
-                }
+                st.session_state.cart[bean["name"]] = {"name_en": bean["name_en"], "price": bean["price"], "qty": qty}
             st.toast(f"已加入: {bean['name']}")
             st.rerun()
-
     st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<p style="text-align: left; color: white; opacity: 0.1; font-family: \'Michroma\'; letter-spacing: 5px; padding: 60px 0;">APEX ROAST © 2026</p>', unsafe_allow_html=True)
